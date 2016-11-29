@@ -37,7 +37,8 @@
 }
 
 - (void)setImageUrl:(NSString *)imageUrl {
-    [self setZoomScale:1.0 animated:YES];
+    [self setZoomScale:1.0 animated:NO];
+    self.scrollEnabled = NO;
 
     if (!self.progressView.superview) {
         [self addSubview:self.progressView];
@@ -64,6 +65,10 @@
     return self.imageView;
 }
 
+- (void)scrollViewWillBeginZooming:(UIScrollView *)scrollView withView:(UIView *)view {
+    self.scrollEnabled = YES;
+}
+
 - (void)scrollViewDidZoom:(UIScrollView *)scrollView {
     // 延中心点缩放
     CGRect rect = self.imageView.frame;
@@ -84,7 +89,7 @@
     UITouch *touch = touches.anyObject;
     if(touch.tapCount == 2) {
         [NSObject cancelPreviousPerformRequestsWithTarget:self];
-        CGPoint touchPoint = [touch locationInView:_imageView];
+        CGPoint touchPoint = [touch locationInView:self.imageView];
         [self zoomDoubleTapWithPoint:touchPoint];
     }
 
